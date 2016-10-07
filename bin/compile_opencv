@@ -57,7 +57,8 @@ PATH=$build_target/bin:$PATH
 cache_target=$cache/$opencv_file
 build_target=$build/.heroku
 
-if [ ! -f $cache_target ]; then
+if [ ! -f ${cache_target} ]; then
+  echo "No cached compile detected. Building..." | indent
   opencv_package="http://s3.amazonaws.com/tznode/vulcan-compiled-opencv.tgz"
   # download open cv
   vendored_opencv="/app/vendor/opencv"
@@ -75,8 +76,5 @@ mkdir -p $build_target
 tar xzf $cache_target -C $build_target
 
 mkdir -p $build/.profile.d
-
-ls -la $build/*
-ls -la $target/*
 
 echo "export PATH=\$target/bin:\$PATH" > $build/.profile.d/opencv.sh
