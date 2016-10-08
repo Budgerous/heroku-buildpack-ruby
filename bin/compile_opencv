@@ -61,7 +61,7 @@ build_target=$build/.heroku
   cd $build
 
   echo "Compiling OpenCV v${opencv_version}..." | indent
-  wget ${opencv_url}
+  wget ${opencv_url} -O ${opencv_file}
   tar -zxf ${opencv_file}
   cd ${opencv_dir}
   mkdir build
