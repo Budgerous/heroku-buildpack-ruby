@@ -37,12 +37,14 @@ class LanguagePack::Helpers::BundlerWrapper
   end
 
   def clean
+    puts "CLEANING THIS SHIT"
     ENV['BUNDLE_GEMFILE'] = @orig_bundle_gemfile
     FileUtils.remove_entry_secure(@bundler_tmp) if Dir.exist?(@bundler_tmp)
 
     if LanguagePack::Ruby::BUNDLER_VERSION  == "1.7.12"
       # Hack to cleanup after pre 1.8 versions of bundler. See https://github.com/bundler/bundler/pull/3277/
       Dir["#{Dir.tmpdir}/bundler*"].each do |dir|
+        puts dir
         FileUtils.remove_entry_secure(dir) if Dir.exist?(dir) && File.stat(dir).writable?
       end
     end
