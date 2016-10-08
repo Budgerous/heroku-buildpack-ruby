@@ -78,3 +78,4 @@ mkdir -p $build_target
 tar xzf $cache_target -C $build_target
 
 #gem install ruby-opencv -- --with-opencv-dir=${build_target}
+bundle config build.ruby-opencv --with-opencv-dir=${build_target}
