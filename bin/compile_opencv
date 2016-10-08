@@ -78,6 +78,3 @@ tar xzf $cache_target -C $build_target
 mkdir -p $build/.profile.d
 
 echo "export PATH=\$target/bin:\$PATH" > $build/.profile.d/opencv.sh
-
-apt-get install libopencv-calib3d2.3
-apt-get install libopencv-calib3d-dev
