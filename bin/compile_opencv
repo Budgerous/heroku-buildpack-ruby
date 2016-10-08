@@ -57,7 +57,7 @@ PATH=$build_target/bin:$PATH
 cache_target=$cache/$opencv_file
 build_target=$build/.heroku
 
-#if [ ! -f ${cache_target} ]; then
+if [ ! -f ${cache_target} ]; then
   echo "No cached compile detected. Building..." | indent
   cd $build
 
@@ -72,9 +72,9 @@ build_target=$build/.heroku
   cd ..
 
   tar czf ${cache_target} -C ${target} .
-#fi
+fi
 
 mkdir -p $build_target
 tar xzf $cache_target -C $build_target
 
-gem install ruby-opencv -- --with-opencv-dir=${build_target}
+gem install ruby-opencv -- --with-opencv-dir=$build_target
