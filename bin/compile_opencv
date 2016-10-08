@@ -56,23 +56,21 @@ cache_target=$cache/$opencv_file
 build_target=$build/.heroku
 
 echo "No cached compile detected. Building..." | indent
-opencv_package="http://s3.amazonaws.com/tznode/vulcan-compiled-opencv.tgz"
-# download open cv
-vendored_opencv="/app/vendor/opencv"
-mkdir -p $vendored_opencv
-curl $opencv_package -s -o - | tar xzf - -C $vendored_opencv
+cd $build
 
-# copy open cv libs to build dir
-mkdir -p $build/lib
-cp -a "$vendored_opencv/lib/." "$build/lib/"
+echo "Compiling OpenCV v${opencv_version}..." | indent
+wget -q ${opencv_url}
+tar zxf ${opencv_file}
+cd ${opencv_dir}
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=${target} -DCMAKE_FIND_ROOT_PATH=${target} -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_SHARED_LIBS=OFF -DCMAKE_SHARED_LINKER_FLAGS="-fPIC" .. | indent
+make install | indent
+cd ..
 
-tar czf $cache_target -C $vendored_opencv .
+tar czf ${cache_target} -C ${target} .
 
 mkdir -p $build_target
 tar xzf $cache_target -C $build_target
 
-mkdir -p $build/.profile.d
-
 gem install ruby-opencv -- --with-opencv-dir=${build_target}
-
-echo "export PATH=\$target/bin:\$PATH" > $build/.profile.d/opencv.sh
