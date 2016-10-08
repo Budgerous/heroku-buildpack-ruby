@@ -57,7 +57,7 @@ PATH=$build_target/bin:$PATH
 cache_target=$cache/$opencv_file
 build_target=$build/.heroku
 
-#if [ ! -f ${cache_target} ]; then
+if [ ! -f ${cache_target} ]; then
   echo "No cached compile detected. Building..." | indent
   cd $build
 
@@ -67,15 +67,16 @@ build_target=$build/.heroku
   cd ${opencv_dir}
   mkdir build
   cd build
-  cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=RELEASE .. | indent
-  make -j7 | indent
+  cmake -DCMAKE_INSTALL_PREFIX=${target} -DCMAKE_FIND_ROOT_PATH=${target} -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_SHARED_LIBS=ON -DCMAKE_SHARED_LINKER_FLAGS="-fPIC" .. | indent
   make install | indent
   cd ..
 
   tar czf ${cache_target} -C ${target} .
-#fi
+fi
 
 mkdir -p $build_target
 tar xzf $cache_target -C $build_target
 
-gem install ruby-opencv -- --with-opencv-dir=/usr/local
+gem install ruby-opencv -- --with-opencv-dir=$target
+gem install bundler
+bundle config build.ruby-opencv -- --with-opencv-dir=$target
